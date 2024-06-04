@@ -1,3 +1,27 @@
 {
-    "version": 3
+    "manifest_version": 3,
+    "name": "RAWR",
+    "description": "RAWR - RDA Annotator for Web Resources",
+    "version": "0.0.1",
+    "icons": {
+        "32": "images/icon-32.png",
+        "72": "images/icon-72.png",
+        "128": "images/icon-128.png",
+        "512": "images/icon-512.png"
+    },
+    "background": {
+        "service_worker": "service-worker.js"
+    },
+    "action": {
+        "default_icon": {
+            "32": "images/icon-32.png",
+            "72": "images/icon-72.png",
+            "128": "images/icon-128.png",
+            "512": "images/icon-512.png"
+        }
+    },
+    "permissions": [
+        "scripting",
+        "activeTab"
+    ]
 }
