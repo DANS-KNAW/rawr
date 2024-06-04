@@ -1,23 +1,33 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import "./style.css";
 
-function injectExtensionElement() {
-  const extensionElement = document.createElement("rawr-extension");
-  const shadowRoot = extensionElement.attachShadow({ mode: "open" });
+const root = () => {
+  const headLink = document.createElement("link");
+  headLink.rel = "preload";
+  headLink.as = "style";
+  headLink.href = chrome.runtime.getURL("assets/rawr-style.css");
+  document.head.appendChild(headLink);
+
+  const extension = document.createElement("rawr-extension");
+  const shadowRoot = extension.attachShadow({ mode: "open" });
+  const shadowLink = document.createElement("link");
   const root = document.createElement("div");
+
+  shadowLink.rel = "stylesheet";
+  shadowLink.href = chrome.runtime.getURL("assets/rawr-style.css");
+  shadowRoot.appendChild(shadowLink);
 
   root.id = "root";
   shadowRoot.appendChild(root);
 
-  document.documentElement.appendChild(extensionElement);
+  document.documentElement.appendChild(extension);
 
   return root;
-}
+};
 
-const root = injectExtensionElement();
-
-ReactDOM.createRoot(root).render(
+ReactDOM.createRoot(root()).render(
   <React.StrictMode>
-    <h1>Hello World!</h1>
+    <h1 className="text-4xl text-amber-400 font-black">Hello World!</h1>
   </React.StrictMode>
 );

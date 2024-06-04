@@ -9,6 +9,7 @@ export default defineConfig({
       input: {
         background: "src/background.ts",
         content: "src/content.tsx",
+        "rawr-style": "src/style.css",
       },
       output: {
         entryFileNames: "scripts/[name].js",
