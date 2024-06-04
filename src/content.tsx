@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import "./style.css";
+import App from "./App";
 
 const root = () => {
   const headLink = document.createElement("link");
@@ -28,6 +29,6 @@ const root = () => {
 
 ReactDOM.createRoot(root()).render(
   <React.StrictMode>
-    <h1 className="text-4xl text-amber-400 font-black">Hello World!</h1>
+    <App />
   </React.StrictMode>
 );
