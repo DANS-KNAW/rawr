@@ -10,7 +10,7 @@
         "512": "images/icon-512.png"
     },
     "background": {
-        "service_worker": "service-worker.js"
+        "service_worker": "scripts/background.js"
     },
     "action": {
         "default_icon": {

@@ -1,5 +1,5 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -7,13 +7,13 @@ export default defineConfig({
   build: {
     rollupOptions: {
       input: {
-        background: 'src/background.ts',
+        background: "src/background.ts",
       },
       output: {
-        entryFileNames: '[name].js',
-        chunkFileNames: '[name].js',
-        assetFileNames: '[name].[ext]',
-      }
-    }
-  }
-})
+        entryFileNames: "scripts/[name].js",
+        chunkFileNames: "scripts/[name].js",
+        assetFileNames: "assets/[name].[ext]",
+      },
+    },
+  },
+});
