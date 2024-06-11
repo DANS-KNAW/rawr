@@ -8,7 +8,7 @@ export default function Topbar({
   isSidebarOpen: boolean;
 }) {
   return (
-    <div className="w-full h-20 bg-rda-500 relative border-b border-l border-white px-8">
+    <div className="w-full h-20 relative border-b border-l border-white px-8 bg-gradient-to-br from-rda-500 from-20% via-rda-600 via-60% to-brown-500 to-100%">
       <button
         onClick={handleSidebar}
         className="size-10 flex justify-center items-center text-white absolute top-0 -left-5 bg-rda-500 rounded-bl-md border-b border-l border-white"
@@ -50,7 +50,7 @@ export default function Topbar({
           <img
             src={chrome.runtime.getURL("images/tiger.png")}
             alt="RDA-TIGER"
-            className="absolute h-[5.625rem] -bottom-2"
+            className="absolute h-[5.625rem] -bottom-2 z-50"
           />
         </div>
       </div>

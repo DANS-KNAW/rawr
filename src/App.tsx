@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Topbar from "./components/Topbar";
+import Form from "./components/form/Form";
 
 export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -14,10 +15,10 @@ export default function App() {
         isSidebarOpen ? "-translate-x-[calc(27rem-4px)]" : "translate-x-0"
       }`}
     >
-      <div className="w-[28rem] h-screen">
+      <div className="w-[28rem] h-screen flex flex-col">
         <Topbar handleSidebar={handleSidebar} isSidebarOpen={isSidebarOpen} />
-        <main className="bg-gray-200 px-5 h-full w-full">
-          <h1 className="font-bold">RDA Sidebar</h1>
+        <main className="bg-gray-100 px-5 h-full w-full relative overflow-y-scroll">
+          <Form />
         </main>
       </div>
     </div>
