@@ -10,13 +10,15 @@ export default function TextInput({
 
   return (
     <div>
-      <label
-        htmlFor={internalID}
-        className="text-sm leading-6 text-gray-900 capitalize flex justify-between items-center"
-      >
-        <span>{inputProps.name.toLowerCase()}</span>
+      <div className="flex justify-between items-center">
+        <label
+          htmlFor={internalID}
+          className="text-sm leading-6 text-gray-900 capitalize flex-1"
+        >
+          {inputProps.name.toLowerCase()}
+        </label>
         <InfoIcon className="size-5 cursor-pointer hover:text-rda-500" />
-      </label>
+      </div>
       <div className="mt-2">
         <input
           type="text"
