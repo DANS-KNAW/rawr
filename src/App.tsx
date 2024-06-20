@@ -17,7 +17,7 @@ export default function App() {
     >
       <div className="w-[28rem] h-screen flex flex-col">
         <Topbar handleSidebar={handleSidebar} isSidebarOpen={isSidebarOpen} />
-        <main className="bg-gray-100 px-5 h-full w-full relative overflow-y-scroll">
+        <main className="bg-gray-100 h-full w-full relative overflow-y-scroll">
           <Form />
         </main>
       </div>
