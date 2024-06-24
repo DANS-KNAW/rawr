@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { Fragment, useContext, useState } from "react";
 import Topbar from "./components/Topbar";
-import Form from "./components/form/Form";
+import Form from "./views/Form";
+import Settings from "./views/Settings";
+import NavigationContext from "./context/NavigationContext";
+import Annotations from "./views/Annotations";
 
 export default function App() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { navigationItems } = useContext(NavigationContext);
 
   const handleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -18,7 +22,13 @@ export default function App() {
       <div className="w-[28rem] h-screen flex flex-col">
         <Topbar handleSidebar={handleSidebar} isSidebarOpen={isSidebarOpen} />
         <main className="bg-gray-100 h-full w-full relative overflow-y-scroll">
-          <Form />
+          {navigationItems.map((item) => (
+            <Fragment>
+              {item.current && item.tab === "annotations" && <Annotations />}
+              {item.current && item.tab === "form" && <Form />}
+              {item.current && item.tab === "settings" && <Settings />}
+            </Fragment>
+          ))}
         </main>
       </div>
     </div>

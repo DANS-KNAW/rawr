@@ -1,19 +1,18 @@
 import { ReactNode, useEffect, useState } from "react";
-import TextInput from "./TextInput";
-import InfoDialog from "../InfoDialog";
-// import Textarea from "./Textarea";
-import formSchema from "../../data/form-schema";
+import TextInput from "../components/form/TextInput";
+import InfoDialog from "../components/InfoDialog";
+import formSchema from "../data/form-schema";
 import {
   ComboBoxDataItem,
   FormDto,
   InputPresets,
   Vocabularies,
-} from "../../types/inputs-types";
-import Textarea from "./Textarea";
-import createAnnotation from "../../lib/create-annotation";
-import getResourceURL from "../../lib/get-resource-url";
-import getCurrentDate from "../../lib/get-current-date";
-import TypeAHead from "./TypeAHead";
+} from "../types/inputs-types";
+import Textarea from "../components/form/Textarea";
+import createAnnotation from "../lib/create-annotation";
+import getResourceURL from "../lib/get-resource-url";
+import getCurrentDate from "../lib/get-current-date";
+import TypeAHead from "../components/form/TypeAHead";
 import {
   domains,
   gorcAttributes,
@@ -23,7 +22,7 @@ import {
   pathways,
   resource_type,
   workingGroups,
-} from "../../data/vocabularies";
+} from "../data/vocabularies";
 
 export default function Form() {
   const [schema, setSchema] = useState<FormDto>(formSchema);

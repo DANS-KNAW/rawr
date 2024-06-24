@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import "./style.css";
 import App from "./App";
+import { NavigationProvider } from "./context/NavigationProvider";
 
 const root = () => {
   const headLink = document.createElement("link");
@@ -29,6 +30,8 @@ const root = () => {
 
 ReactDOM.createRoot(root()).render(
   <React.StrictMode>
-    <App />
+    <NavigationProvider>
+      <App />
+    </NavigationProvider>
   </React.StrictMode>
 );
