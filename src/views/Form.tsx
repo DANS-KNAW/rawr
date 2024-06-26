@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import TextInput from "../components/form/TextInput";
 import InfoDialog from "../components/InfoDialog";
 import formSchema from "../data/form-schema";
@@ -12,7 +12,6 @@ import Textarea from "../components/form/Textarea";
 import createAnnotation from "../lib/create-annotation";
 import getResourceURL from "../lib/get-resource-url";
 import getCurrentDate from "../lib/get-current-date";
-import TypeAHead from "../components/form/TypeAHead";
 import {
   domains,
   gorcAttributes,
@@ -23,14 +22,27 @@ import {
   resource_type,
   workingGroups,
 } from "../data/vocabularies";
+import ConfigContext from "../context/ConfigContext";
+import { TextSelectionContext } from "../context/TextSelectionProvider";
+import TypeAHead from "../components/form/TypeAHead";
 
 export default function Form() {
   const [schema, setSchema] = useState<FormDto>(formSchema);
   const [formData, setFormData] = useState<{ [key: string]: any }>();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [dialogContent, setDialogContent] = useState<ReactNode[]>([]);
+  const [dialogContent, setDialogContent] = useState<string>("");
   const [canSubmit, setCanSubmit] = useState(false);
-  const [annotatedText, setAnnotatedText] = useState("");
+
+  const { config } = useContext(ConfigContext);
+  const selection = useContext(TextSelectionContext);
+
+  const initialSelectionRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (initialSelectionRef.current === null && selection !== null) {
+      initialSelectionRef.current = selection;
+    }
+  }, [selection]);
 
   const handleChange = (name: string, value: any) => {
     setFormData((prevState: any) => ({
@@ -39,8 +51,8 @@ export default function Form() {
     }));
   };
 
-  const handleInfoDialog = (content: ReactNode[] | string) => {
-    setDialogContent(() => [...content]);
+  const handleInfoDialog = (content: string) => {
+    setDialogContent(content);
     setDialogOpen(!dialogOpen);
   };
 
@@ -60,21 +72,6 @@ export default function Form() {
       setSchema;
       setCanSubmit;
     }
-
-    const handleAnnotationChange = () => {
-      const selection = window.getSelection();
-      if (selection && selection.toString()) {
-        setAnnotatedText(selection.toString());
-      } else {
-        setAnnotatedText("");
-      }
-    };
-
-    document.addEventListener("selectionchange", handleAnnotationChange);
-
-    return () => {
-      document.removeEventListener("selectionchange", handleAnnotationChange);
-    };
   }, [formData]);
 
   const getPreset = (preset: InputPresets) => {
@@ -175,6 +172,14 @@ export default function Form() {
           />
         );
       case "combobox":
+        if (
+          config.vocabularies[
+            field.vocabulary as keyof typeof config.vocabularies
+          ] === false
+        ) {
+          return null;
+        }
+
         return (
           <TypeAHead
             inputProps={{
@@ -182,6 +187,8 @@ export default function Form() {
               info: field.info,
               required: field.required,
               disabled: field.disabled,
+              multiple: field.multiple,
+              dropdownUp: field.dropdownUp,
               data: getComboBoxData(field.vocabulary),
               callback: handleChange,
               infoDialog: handleInfoDialog,
@@ -211,7 +218,7 @@ export default function Form() {
             info: "This is the annotated text.",
             required: true,
             disabled: true,
-            value: annotatedText,
+            value: initialSelectionRef.current || "",
             rows: 8,
             callback: () => {},
             infoDialog: handleInfoDialog,

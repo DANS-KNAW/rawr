@@ -62,22 +62,25 @@ const formSchema: FormDto = {
       disabled: false,
       info: "Select an RDA Pathway from the list. You can start typing to filter the list.",
       vocabulary: "pathways",
+      multiple: true,
     },
     {
       type: "combobox",
       name: "GORC Elements",
       required: false,
       disabled: false,
-      info: "Select a GORC Element from the list. You can start typing to filter the list. <a href=‘https://www.rd-alliance.org/group_output/gorc-ig-typology-and-definitions/’ target=‘_blank’ >Read more about GORC</a>.",
+      info: 'Select a GORC Element from the list. You can start typing to filter the list. <a href="https://www.rd-alliance.org/group_output/gorc-ig-typology-and-definitions/" target="_blank" >Read more about GORC</a>.',
       vocabulary: "gorc_elements",
+      multiple: true,
     },
     {
       type: "combobox",
       name: "GORC Attributes",
       required: false,
       disabled: false,
-      info: "Select a GORC Attribute from the list. You can start typing to filter the list. <a href=‘https://www.rd-alliance.org/group_output/gorc-ig-typology-and-definitions/’ target=‘_blank’ >Read more about GORC</a>.",
+      info: 'Select a GORC Attribute from the list. You can start typing to filter the list. <a href="https://www.rd-alliance.org/group_output/gorc-ig-typology-and-definitions/" target="_blank" >Read more about GORC</a>.',
       vocabulary: "gorc_attributes",
+      multiple: true,
     },
     {
       type: "combobox",
@@ -86,6 +89,7 @@ const formSchema: FormDto = {
       disabled: false,
       info: "Select an RDA Interest Group from the list. You can start typing to filter the list.",
       vocabulary: "interest_groups",
+      multiple: true,
     },
     {
       type: "combobox",
@@ -94,6 +98,8 @@ const formSchema: FormDto = {
       disabled: false,
       info: "Select an RDA Working Group from the list. You can start typing to filter the list.",
       vocabulary: "working_groups",
+      multiple: true,
+      dropdownUp: true,
     },
     {
       type: "combobox",
@@ -102,6 +108,8 @@ const formSchema: FormDto = {
       disabled: false,
       info: "Select an RDA Scientific Disciplne (Domain) from the list. You can start typing to filter the list.",
       vocabulary: "domains",
+      multiple: true,
+      dropdownUp: true,
     },
   ],
 };

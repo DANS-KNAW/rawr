@@ -4,7 +4,7 @@ import NavigationContext from "../context/NavigationContext";
 export default function NavigationTabs() {
   const { navigationItems, setCurrent } = useContext(NavigationContext);
 
-  const tabs = navigationItems.filter((item) => item.label !== undefined);
+  const tabs = navigationItems.filter((item) => item.parent === undefined);
 
   return (
     <div>

@@ -42,7 +42,7 @@ export default function Topbar({
           <div className="pt-2">
             <h1 className="uppercase italic text-white text-2xl -mt-1">
               <span className="font-black">RDA Tiger</span>
-              <span className="font-normal text-base ml-2">v1.0</span>
+              <span className="font-normal text-base ml-2">v1.1</span>
             </h1>
             <div className="mt-3">
               <Breadcrumbs />
@@ -52,7 +52,7 @@ export default function Topbar({
             <img
               src={chrome.runtime.getURL("images/tiger.png")}
               alt="RDA-TIGER"
-              className="absolute h-[5.625rem] -bottom-2 z-50"
+              className="absolute h-tiger -bottom-2 z-50"
             />
           </div>
         </div>

@@ -1,11 +1,9 @@
-import { ReactNode } from "react";
-
 export default function InfoDialog({
   displayToggle,
   content,
 }: {
   displayToggle: () => void;
-  content: ReactNode[];
+  content: string;
 }) {
   return (
     <div className="z-50 px-2 w-full">
@@ -38,10 +36,8 @@ export default function InfoDialog({
             </svg>
           </button>
         </div>
-        <div className="mt-4">
-          <p className="text-sm text-gray-500">
-            {content}
-          </p>
+        <div className="mt-4 text-sm text-gray-500 prose prose-a:underline prose-a:text-rda-500">
+          <div dangerouslySetInnerHTML={{ __html: content }} />
         </div>
       </div>
     </div>

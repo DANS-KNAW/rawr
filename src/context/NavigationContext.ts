@@ -1,6 +1,7 @@
 import { createContext } from "react";
 
 export interface NavigationItem {
+  parent?: string;
   label?: string;
   current: boolean;
   tab: string;

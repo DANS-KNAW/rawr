@@ -1,26 +1,41 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Switch } from "@headlessui/react";
 
-export default function SwitchToggle() {
-  const [enabled, setEnabled] = useState(true);
+export default function SwitchToggle({
+  enabled,
+  callback,
+}: {
+  enabled: boolean;
+  callback: (enabled: boolean) => void;
+}) {
+  const [isEnabled, setEnabled] = useState(enabled);
+
+  useEffect(() => {
+    setEnabled(enabled);
+  }, [enabled]);
+
+  const toggleEnabled = (status: boolean) => {
+    setEnabled(status);
+    callback(status);
+  };
 
   return (
     <Switch
-      checked={enabled}
-      onChange={setEnabled}
+      checked={isEnabled}
+      onChange={toggleEnabled}
       className={`${
-        enabled ? "bg-rda-500" : "bg-gray-200"
+        isEnabled ? "bg-rda-500" : "bg-gray-200"
       } relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-rda-500 focus:ring-offset-2`}
     >
       <span className="sr-only">Use setting</span>
       <span
         className={`${
-          enabled ? "translate-x-5" : "translate-x-0"
+          isEnabled ? "translate-x-5" : "translate-x-0"
         } pointer-events-none relative inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out`}
       >
         <span
           className={`${
-            enabled
+            isEnabled
               ? "opacity-0 duration-100 ease-out"
               : "opacity-100 duration-200 ease-in"
           } absolute inset-0 flex h-full w-full items-center justify-center transition-opacity`}
@@ -42,7 +57,7 @@ export default function SwitchToggle() {
         </span>
         <span
           className={`${
-            enabled
+            isEnabled
               ? "opacity-100 duration-200 ease-in"
               : "opacity-0 duration-100 ease-out"
           } absolute inset-0 flex h-full w-full items-center justify-center transition-opacity`}

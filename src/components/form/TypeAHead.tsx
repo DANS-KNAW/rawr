@@ -6,7 +6,7 @@ import {
   ComboboxOptions,
   Label,
 } from "@headlessui/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ComboBoxDataItem, ComboBoxInputDto } from "../../types/inputs-types";
 import InfoIcon from "../icons/Info";
 
@@ -16,25 +16,46 @@ export default function TypeAHead({
   inputProps: ComboBoxInputDto;
 }) {
   const [query, setQuery] = useState("");
-  const [selectedItem, setSelectedItem] = useState(undefined);
+  const [multipleItems, setMultipleItems] = useState<ComboBoxDataItem[]>([]);
+  const [selectedItem, setSelectedItem] = useState<ComboBoxDataItem | null>(
+    null
+  );
   const internalID = inputProps.name.toLowerCase().replace(" ", "-");
 
-  // useEffect(() => {
-  //   inputProps.callback(internalID, value);
-  // }, [value]);
+  const multiple = inputProps.multiple;
+
+  useEffect(() => {
+    if (!multiple && selectedItem !== null) {
+      inputProps.callback(internalID, selectedItem);
+    }
+    if (multiple && selectedItem !== null) {
+      const newItems = [...multipleItems, selectedItem];
+      setMultipleItems(newItems);
+      inputProps.callback(internalID, multipleItems);
+    }
+  }, [selectedItem]);
+
+  useEffect(() => {
+    if (multiple) {
+      inputProps.callback(internalID, multipleItems);
+    }
+  }, [multipleItems]);
 
   const filteredItems =
     query === ""
       ? inputProps.data
       : inputProps.data.filter((item) => {
-          return item.label.toLowerCase().includes(query.toLowerCase());
+          const label = item.label || "";
+          return label.toLowerCase().includes(query.toLowerCase());
         });
 
   return (
     <Combobox
       as="div"
       value={selectedItem}
-      onChange={setSelectedItem}
+      onChange={(value: ComboBoxDataItem | null) => {
+        setSelectedItem(value);
+      }}
     >
       <div className="flex justify-between items-center">
         <Label
@@ -52,6 +73,25 @@ export default function TypeAHead({
           </div>
         )}
       </div>
+      {multiple && multipleItems.length > 0 && (
+        <ul className="my-2 space-x-2 space-y-2">
+          {multipleItems.map((item) => (
+            <button
+              disabled={inputProps.disabled}
+              key={item.identifier}
+              onClick={() =>
+                setMultipleItems(
+                  multipleItems.filter((i) => i.identifier !== item.identifier)
+                )
+              }
+              type="button"
+              className="inline-flex items-center rounded-md bg-rda-50 px-2 py-1 text-xs font-medium text-rda-500 ring-1 ring-inset ring-rda-500/10 hover:bg-rda-100 hover:text-rda-600 disabled:cursor-not-allowed disabled:bg-rda-50 disabled:hover:text-rda-500"
+            >
+              {item.label} X
+            </button>
+          ))}
+        </ul>
+      )}
       <div className="relative mt-2">
         <div className="absolute inset-y-0 left-0 flex items-center rounded-l-md px-2">
           <svg
@@ -74,7 +114,9 @@ export default function TypeAHead({
           className="w-full rounded-md border-0 bg-white py-1.5 pl-8 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-rda-500 sm:text-sm sm:leading-6"
           onChange={(event) => setQuery(event.target.value)}
           onBlur={() => setQuery("")}
-          displayValue={(item: ComboBoxDataItem) => item.label}
+          displayValue={(item: ComboBoxDataItem | null) =>
+            item ? item.label : ""
+          }
         />
         <ComboboxButton className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2">
           <svg
@@ -95,54 +137,65 @@ export default function TypeAHead({
         </ComboboxButton>
 
         {filteredItems.length > 0 && (
-          <ComboboxOptions className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-            {filteredItems.map((item) => (
-              <ComboboxOption
-                key={item.identifier}
-                value={item}
-                className={({ focus }) =>
-                  `relative cursor-default select-none py-2 pl-3 pr-9 ${
-                    focus ? "bg-rda-500 text-white" : "text-gray-900"
-                  }`
-                }
-              >
-                {({ focus, selected }) => (
-                  <>
-                    <span
-                      className={`block truncate ${
-                        selected && "font-semibold"
-                      }`}
-                    >
-                      {item.label}
-                    </span>
-
-                    {selected && (
+          <ComboboxOptions className={`absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-sm ${inputProps.dropdownUp ? "bottom-10": ""}`}>
+            {filteredItems.map((item) => {
+              const isSelected =
+                multiple &&
+                multipleItems.some(
+                  (selectedItem) => selectedItem.identifier === item.identifier
+                );
+              return (
+                <ComboboxOption
+                  key={item.identifier}
+                  value={item}
+                  className={({ focus }) =>
+                    `relative cursor-default select-none py-2 pl-3 pr-9 ${
+                      focus ? "bg-rda-500 text-white" : "text-gray-900"
+                    } ${
+                      isSelected &&
+                      "cursor-not-allowed bg-gray-200 text-gray-500"
+                    }`
+                  }
+                  disabled={isSelected}
+                >
+                  {({ focus, selected }) => (
+                    <>
                       <span
-                        className={`absolute inset-y-0 right-0 flex items-center pr-4 ${
-                          focus ? "text-white" : "text-rda-500"
+                        className={`block truncate ${
+                          selected && "font-semibold"
                         }`}
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="h-5 w-5"
-                          aria-hidden="true"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="m4.5 12.75 6 6 9-13.5"
-                          />
-                        </svg>
+                        {item.label}
                       </span>
-                    )}
-                  </>
-                )}
-              </ComboboxOption>
-            ))}
+
+                      {selected && (
+                        <span
+                          className={`absolute inset-y-0 right-0 flex items-center pr-4 ${
+                            focus ? "text-white" : "text-rda-500"
+                          }`}
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="h-5 w-5"
+                            aria-hidden="true"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="m4.5 12.75 6 6 9-13.5"
+                            />
+                          </svg>
+                        </span>
+                      )}
+                    </>
+                  )}
+                </ComboboxOption>
+              );
+            })}
           </ComboboxOptions>
         )}
       </div>

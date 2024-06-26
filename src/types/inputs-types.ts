@@ -1,5 +1,3 @@
-import { ReactNode } from "react";
-
 export interface FormDto {
   fields: InputSchemaDto[];
 }
@@ -19,7 +17,7 @@ interface TextInputSchemaDto extends BaseInputSchema {
 export interface TextInputDto extends BaseInputSchema {
   value?: string;
   callback: (key: string, value: string) => void;
-  infoDialog: (content: ReactNode[] | string) => void;
+  infoDialog: (content: string) => void;
 }
 
 interface TextareaInputSchemaDto extends BaseInputSchema {
@@ -32,19 +30,23 @@ export interface TextareaInputDto extends BaseInputSchema {
   value?: string;
   rows?: number;
   callback: (key: string, value: string) => void;
-  infoDialog: (content: ReactNode[] | string) => void;
+  infoDialog: (content: string) => void;
 }
 
 interface ComboBoxInputSchemaDto extends BaseInputSchema {
   type: "combobox";
   vocabulary: Vocabularies;
+  multiple?: boolean;
+  dropdownUp?: boolean;
 }
 
 export interface ComboBoxInputDto extends BaseInputSchema {
   value?: string;
   data: ComboBoxDataItem[];
-  callback: (key: string, value: string) => void;
-  infoDialog: (content: ReactNode[] | string) => void;
+  multiple?: boolean;
+  dropdownUp?: boolean;
+  callback: (key: string, value: any) => void;
+  infoDialog: (content: string) => void;
 }
 
 export type InputSchemaDto =
@@ -52,11 +54,22 @@ export type InputSchemaDto =
   | TextareaInputSchemaDto
   | ComboBoxInputSchemaDto;
 export type InputPresets = "resource_url" | "current_date";
-export type Vocabularies = "languages" | "resource_types" | "domains" | "working_groups" | "interest_groups" | "gorc_attributes" | "gorc_elements" | "pathways";
+export type Vocabularies =
+  | "languages"
+  | "resource_types"
+  | ToggleableVocabularies;
+export type ToggleableVocabularies =
+  | "domains"
+  | "working_groups"
+  | "interest_groups"
+  | "gorc_attributes"
+  | "gorc_elements"
+  | "pathways";
 
 export interface ComboBoxDataItem {
   identifier: string;
   value: string;
   label: string;
   sublabel?: string;
+  url?: string;
 }
