@@ -4,7 +4,7 @@ import InfoIcon from "../icons/Info";
 
 export default function Textarea({ inputProps }: { inputProps: TextareaInputDto }) {
   const [value, setValue] = useState<string>(inputProps.value ?? "");
-  const internalID = inputProps.name.toLowerCase().replace(" ", "-");
+  const internalID = inputProps.name.toLowerCase().replace(" ", "_");
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);

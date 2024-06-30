@@ -8,14 +8,14 @@ export const ConfigProvider = ({
   children: ReactNode | ReactNode[];
 }) => {
   const [config, setConfig] = useState<Config>({
-    seenActiveDevelopmentWarning: false,
+    seenActiveDevelopmentWarning: true,
     vocabularies: {
-      working_groups: false,
-      interest_groups: false,
-      pathways: false,
-      gorc_elements: false,
-      gorc_attributes: false,
-      domains: false,
+      working_groups: true,
+      interest_groups: true,
+      pathways: true,
+      gorc_elements: true,
+      gorc_attributes: true,
+      domains: true,
     },
   });
 

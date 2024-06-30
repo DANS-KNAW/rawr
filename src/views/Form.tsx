@@ -9,7 +9,6 @@ import {
   Vocabularies,
 } from "../types/inputs-types";
 import Textarea from "../components/form/Textarea";
-import createAnnotation from "../lib/create-annotation";
 import getResourceURL from "../lib/get-resource-url";
 import getCurrentDate from "../lib/get-current-date";
 import {
@@ -25,18 +24,63 @@ import {
 import ConfigContext from "../context/ConfigContext";
 import { TextSelectionContext } from "../context/TextSelectionProvider";
 import TypeAHead from "../components/form/TypeAHead";
+import { Annotation } from "../types/annotation";
 
 export default function Form() {
   const [schema, setSchema] = useState<FormDto>(formSchema);
   const [formData, setFormData] = useState<{ [key: string]: any }>();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogContent, setDialogContent] = useState<string>("");
-  const [canSubmit, setCanSubmit] = useState(false);
+  const [canSubmit, setCanSubmit] = useState(true);
 
   const { config } = useContext(ConfigContext);
   const selection = useContext(TextSelectionContext);
 
   const initialSelectionRef = useRef<string | null>(null);
+
+  const currentDate = new Date().toISOString().split('T')[0];
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const formBody: Annotation = {
+      page_url: formData?.resource,
+      uritype: formData?.resource_type.value,
+      annotation: formData?.annotation,
+      citation: {
+        title: formData?.title,
+        description: formData?.description,
+        notes: formData?.notes,
+        submitter: "",
+        language: {
+          id: formData?.language.id,
+          label: formData?.language.label,
+          value: formData?.language.value,
+        },
+        created_at: currentDate,
+        resource: formData?.resource,
+      },
+      vocabularies: {
+        pathways: formData?.pathways ?? [],
+        gorc_attributes: formData?.gorc_attributes ?? [],
+        gorc_elements: formData?.gorc_elements ?? [],
+        interest_groups: formData?.interest_groups ?? [],
+        working_groups: formData?.working_groups ?? [],
+        domains: formData?.["disciplies_(domains)"] ?? [],
+      },
+    };
+
+    const response = await fetch(import.meta.env.VITE_API_ENDPOINT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-api-key": import.meta.env.VITE_API_KEY as string,
+      },
+      body: JSON.stringify(formBody),
+    });
+
+    console.log(response);
+  };
 
   useEffect(() => {
     if (initialSelectionRef.current === null && selection !== null) {
@@ -58,13 +102,6 @@ export default function Form() {
 
   const toggleDialog = () => {
     setDialogOpen(!dialogOpen);
-  };
-
-  const submitForm = () => {
-    if (!formData) {
-      return;
-    }
-    createAnnotation(formData);
   };
 
   useEffect(() => {
@@ -89,49 +126,49 @@ export default function Form() {
     switch (vocabulary) {
       case "languages":
         return language.map((item) => ({
-          identifier: item.value,
+          id: item.value,
           value: item.value,
           label: item.label,
         }));
       case "resource_types":
         return resource_type.map((item) => ({
-          identifier: item.id,
+          id: item.id,
           value: item.value,
           label: item.label,
         }));
       case "domains":
         return domains.map((item) => ({
-          identifier: item.UUID,
+          id: item.UUID,
           value: item.UUID,
           label: item["List Item"],
         }));
       case "working_groups":
         return workingGroups.map((item) => ({
-          identifier: item.uuid_interestgroup,
+          id: item.uuid_interestgroup,
           value: item.uuid_interestgroup,
           label: item.title,
         }));
       case "interest_groups":
         return interestgroups.map((item) => ({
-          identifier: item.uuid_interestgroup,
+          id: item.uuid_interestgroup,
           value: item.uuid_interestgroup,
           label: item.title,
         }));
       case "gorc_attributes":
         return gorcAttributes.map((item) => ({
-          identifier: item.uuid_attribute,
+          id: item.uuid_attribute,
           value: item.uuid_attribute,
           label: item.attribute,
         }));
       case "gorc_elements":
         return gorcElements.map((item) => ({
-          identifier: item.uuid_element,
+          id: item.uuid_element,
           value: item.uuid_element,
           label: item.element,
         }));
       case "pathways":
         return pathways.map((item) => ({
-          identifier: item.uuid_pathway,
+          id: item.uuid_pathway,
           value: item.uuid_pathway,
           label: item.pathway,
         }));
@@ -225,11 +262,10 @@ export default function Form() {
           }}
         />
       </div>
-      <form className="my-4 px-5 pb-8">
+      <form className="my-4 px-5 pb-8" onSubmit={handleSubmit}>
         <div className="space-y-4">{FormContent}</div>
         <button
           type="submit"
-          onClick={submitForm}
           title={canSubmit ? "" : "Please fill out all required fields"}
           disabled={!canSubmit}
           className="mt-6 w-full uppercase rounded-md bg-rda-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-rda-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rda-500 disabled:cursor-not-allowed disabled:opacity-80 disabled:hover:bg-rda-500 disabled:select-none"

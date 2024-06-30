@@ -8,7 +8,7 @@ export default function TextInput({
   inputProps: TextInputDto;
 }) {
   const [value, setValue] = useState<string>(inputProps.value ?? "");
-  const internalID = inputProps.name.toLowerCase().replace(" ", "-");
+  const internalID = inputProps.name.toLowerCase().replace(" ", "_");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);

@@ -67,7 +67,7 @@ export type ToggleableVocabularies =
   | "pathways";
 
 export interface ComboBoxDataItem {
-  identifier: string;
+  id: string;
   value: string;
   label: string;
   sublabel?: string;

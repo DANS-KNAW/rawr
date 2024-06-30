@@ -20,7 +20,7 @@ export default function TypeAHead({
   const [selectedItem, setSelectedItem] = useState<ComboBoxDataItem | null>(
     null
   );
-  const internalID = inputProps.name.toLowerCase().replace(" ", "-");
+  const internalID = inputProps.name.toLowerCase().replace(" ", "_");
 
   const multiple = inputProps.multiple;
 
@@ -78,10 +78,10 @@ export default function TypeAHead({
           {multipleItems.map((item) => (
             <button
               disabled={inputProps.disabled}
-              key={item.identifier}
+              key={item.id}
               onClick={() =>
                 setMultipleItems(
-                  multipleItems.filter((i) => i.identifier !== item.identifier)
+                  multipleItems.filter((i) => i.id !== item.id)
                 )
               }
               type="button"
@@ -117,6 +117,7 @@ export default function TypeAHead({
           displayValue={(item: ComboBoxDataItem | null) =>
             item ? item.label : ""
           }
+          required={inputProps.required ?? undefined}
         />
         <ComboboxButton className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2">
           <svg
@@ -142,11 +143,11 @@ export default function TypeAHead({
               const isSelected =
                 multiple &&
                 multipleItems.some(
-                  (selectedItem) => selectedItem.identifier === item.identifier
+                  (selectedItem) => selectedItem.id === item.id
                 );
               return (
                 <ComboboxOption
-                  key={item.identifier}
+                  key={item.id}
                   value={item}
                   className={({ focus }) =>
                     `relative cursor-default select-none py-2 pl-3 pr-9 ${
