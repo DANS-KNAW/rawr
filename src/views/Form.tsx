@@ -226,6 +226,7 @@ export default function Form() {
               disabled: field.disabled,
               multiple: field.multiple,
               dropdownUp: field.dropdownUp,
+              defaultValue: field.defaultValue,
               data: getComboBoxData(field.vocabulary),
               callback: handleChange,
               infoDialog: handleInfoDialog,

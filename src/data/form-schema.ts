@@ -30,6 +30,7 @@ const formSchema: FormDto = {
       disabled: false,
       info: "The default language is English, only change of this is not the case.",
       vocabulary: "languages",
+      defaultValue: "eng",
     },
     {
       type: "text",

@@ -25,6 +25,17 @@ export default function TypeAHead({
   const multiple = inputProps.multiple;
 
   useEffect(() => {
+    if (inputProps.defaultValue) {
+      const item = inputProps.data.find(
+        (item) => item.id === inputProps.defaultValue
+      );
+      if (item) {
+        setSelectedItem(item);
+      }
+    }
+  }, [inputProps.defaultValue]);
+
+  useEffect(() => {
     if (!multiple && selectedItem !== null) {
       inputProps.callback(internalID, selectedItem);
     }

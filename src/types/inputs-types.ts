@@ -38,6 +38,7 @@ interface ComboBoxInputSchemaDto extends BaseInputSchema {
   vocabulary: Vocabularies;
   multiple?: boolean;
   dropdownUp?: boolean;
+  defaultValue?: string;
 }
 
 export interface ComboBoxInputDto extends BaseInputSchema {
@@ -45,6 +46,7 @@ export interface ComboBoxInputDto extends BaseInputSchema {
   data: ComboBoxDataItem[];
   multiple?: boolean;
   dropdownUp?: boolean;
+  defaultValue?: string;
   callback: (key: string, value: any) => void;
   infoDialog: (content: string) => void;
 }
