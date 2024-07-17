@@ -29,7 +29,7 @@ export default function TextInput({
           htmlFor={internalID}
           className="text-sm leading-6 text-gray-900 capitalize flex-1"
         >
-          <span>{inputProps.name.toLowerCase()}</span>
+          <span>{inputProps.name}</span>
           {inputProps.required === true && (
             <span className="text-red-500 ml-1">*</span>
           )}

@@ -62,7 +62,7 @@ export default function TypeAHead({
           htmlFor={internalID}
           className="text-sm leading-6 text-gray-900 capitalize flex-1"
         >
-          <span>{inputProps.name.toLowerCase()}</span>
+          <span>{inputProps.name}</span>
           {inputProps.required === true && (
             <span className="text-red-500 ml-1">*</span>
           )}
@@ -80,9 +80,7 @@ export default function TypeAHead({
               disabled={inputProps.disabled}
               key={item.id}
               onClick={() =>
-                setMultipleItems(
-                  multipleItems.filter((i) => i.id !== item.id)
-                )
+                setMultipleItems(multipleItems.filter((i) => i.id !== item.id))
               }
               type="button"
               className="inline-flex items-center rounded-md bg-rda-50 px-2 py-1 text-xs font-medium text-rda-500 ring-1 ring-inset ring-rda-500/10 hover:bg-rda-100 hover:text-rda-600 disabled:cursor-not-allowed disabled:bg-rda-50 disabled:hover:text-rda-500"
@@ -138,7 +136,11 @@ export default function TypeAHead({
         </ComboboxButton>
 
         {filteredItems.length > 0 && (
-          <ComboboxOptions className={`absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-sm ${inputProps.dropdownUp ? "bottom-10": ""}`}>
+          <ComboboxOptions
+            className={`absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-sm ${
+              inputProps.dropdownUp ? "bottom-10" : ""
+            }`}
+          >
             {filteredItems.map((item) => {
               const isSelected =
                 multiple &&
