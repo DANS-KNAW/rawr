@@ -69,7 +69,7 @@ const formSchema: FormDto = {
       type: "combobox",
       name: "RDM Vocabulary",
       required: false,
-      disabled: false,
+      disabled: true,
       info: "Annotate this resource with one or more keywords from the Research Data Management Vocabulary",
       vocabulary: "domains",
       multiple: true,
