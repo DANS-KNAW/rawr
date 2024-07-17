@@ -64,6 +64,7 @@ const formSchema: FormDto = {
       info: "Add keywords and tags to characterise or classify the annotation. The type-ahead list is filtered by the current group selections, but this can be turned off.",
       vocabulary: "domains",
       multiple: true,
+      allowCustomValue: true,
     },
     {
       type: "combobox",

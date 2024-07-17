@@ -68,6 +68,7 @@ export default function TypeAHead({
         setSelectedItem(value);
       }}
       disabled={inputProps.disabled ?? undefined}
+      onClose={() => setQuery("")}
     >
       <div className="flex justify-between items-center">
         <Label
@@ -130,7 +131,10 @@ export default function TypeAHead({
           }
           required={inputProps.required ?? undefined}
         />
-        <ComboboxButton disabled={inputProps.disabled ?? undefined} className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2">
+        <ComboboxButton
+          disabled={inputProps.disabled ?? undefined}
+          className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -147,6 +151,21 @@ export default function TypeAHead({
             />
           </svg>
         </ComboboxButton>
+
+        {inputProps.allowCustomValue && filteredItems.length < 1 && query.length > 0 && (
+          <ComboboxOptions
+            className={`absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-sm ${
+              inputProps.dropdownUp ? "bottom-10" : ""
+            }`}
+          >
+            <ComboboxOption
+              value={{ id: `id-${Date.now() + '-' + Math.floor(Math.random() * 1000)}`, label: query }}
+              className="relative select-none py-2 pl-3 pr-9 text-gray-900 hover:bg-gray-200 cursor-pointer"
+            >
+              Create <span className="font-bold">"{query}"</span>
+            </ComboboxOption>
+          </ComboboxOptions>
+        )}
 
         {filteredItems.length > 0 && (
           <ComboboxOptions

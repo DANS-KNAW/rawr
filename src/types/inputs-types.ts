@@ -39,6 +39,7 @@ interface ComboBoxInputSchemaDto extends BaseInputSchema {
   multiple?: boolean;
   dropdownUp?: boolean;
   defaultValue?: string;
+  allowCustomValue?: boolean;
 }
 
 export interface ComboBoxInputDto extends BaseInputSchema {
@@ -47,6 +48,7 @@ export interface ComboBoxInputDto extends BaseInputSchema {
   multiple?: boolean;
   dropdownUp?: boolean;
   defaultValue?: string;
+  allowCustomValue?: boolean;
   callback: (key: string, value: any) => void;
   infoDialog: (content: string) => void;
 }
@@ -66,7 +68,9 @@ export type ToggleableVocabularies =
   | "interest_groups"
   | "gorc_attributes"
   | "gorc_elements"
-  | "pathways";
+  | "pathways"
+  | "codata"
+  | "keywords";
 
 export interface ComboBoxDataItem {
   id: string;
