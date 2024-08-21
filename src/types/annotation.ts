@@ -22,5 +22,6 @@ export interface Annotation {
     interest_groups: string[];
     working_groups: string[];
     domains: string[];
+    keywords: string[];
   };
 }

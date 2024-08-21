@@ -38,7 +38,7 @@ export default function Form() {
 
   const initialSelectionRef = useRef<string | null>(null);
 
-  const currentDate = new Date().toISOString().split('T')[0];
+  const currentDate = new Date().toISOString().split("T")[0];
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -67,6 +67,7 @@ export default function Form() {
         interest_groups: formData?.interest_groups ?? [],
         working_groups: formData?.working_groups ?? [],
         domains: formData?.["disciplies_(domains)"] ?? [],
+        keywords: formData?.['keywords/tags'] ?? [],
       },
     };
 
