@@ -10,6 +10,7 @@ export const ConfigProvider = ({
   const [loading, setLoading] = useState(true);
   const [config, setConfig] = useState<Config>({
     seenActiveDevelopmentWarning: true,
+    skipWelcome: false,
     vocabularies: {
       working_groups: true,
       interest_groups: true,

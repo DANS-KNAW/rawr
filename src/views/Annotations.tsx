@@ -50,11 +50,14 @@ export default function Annotations() {
           Your annotations will currently be deposited on the Search and
           Descovory enviroment. Currently located at rda.dansdemo.nl
         </p>
-        {/* <div className="relative flex items-start mt-6 mb-2">
+        <div className="relative flex items-start mt-6 mb-2">
           <div className="flex h-6 items-center">
             <input
+              checked={config?.skipWelcome}
+              onChange={(e) => {
+                updateConfig({ ...config, skipWelcome: e.target.checked });
+              }}
               type="checkbox"
-              aria-describedby="hide-welcome-message"
               className="size-6 rounded border-gray-300 text-rda-500 focus:ring-rda-500"
             />
           </div>
@@ -63,7 +66,7 @@ export default function Annotations() {
               Don't show this again
             </label>
           </div>
-        </div> */}
+        </div>
         <button
           onClick={() => {
             setCurrent("form");

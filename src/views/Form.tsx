@@ -374,7 +374,6 @@ export default function Form() {
           <div className="flex h-6 items-center">
             <input
               onChange={(e) => {
-                handleChange("remember_choices", e.target.checked);
                 updateConfig({
                   ...config,
                   rememberAnnotationChoices: e.target.checked,

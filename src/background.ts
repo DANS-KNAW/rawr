@@ -37,6 +37,7 @@ chrome.action.onClicked.addListener(async (tab) => {
 // Storage API to manage config
 export interface Config {
   seenActiveDevelopmentWarning: boolean;
+  skipWelcome: boolean;
   vocabularies: {
     pathways: boolean;
     working_groups: boolean;

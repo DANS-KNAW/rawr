@@ -1,5 +1,6 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useContext, useEffect, useState } from "react";
 import NavigationContext, { NavigationItem } from "./NavigationContext";
+import ConfigContext from "./ConfigContext";
 
 export const NavigationProvider = ({
   children,
@@ -11,6 +12,7 @@ export const NavigationProvider = ({
     { label: "About", current: true, tab: "about" },
     { label: "Settings", current: false, tab: "settings" },
   ]);
+  const { config } = useContext(ConfigContext);
 
   // Function to set one navigation item to current and all others to false
   const setCurrent = (tab: string) => {
@@ -22,6 +24,11 @@ export const NavigationProvider = ({
       )
     );
   };
+
+  useEffect(() => {
+    const initialTab = config.skipWelcome ? "form" : "about";
+    setCurrent(initialTab);
+  }, [config.skipWelcome]);
 
   return (
     <NavigationContext.Provider value={{ navigationItems, setCurrent }}>
