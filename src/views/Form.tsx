@@ -35,9 +35,6 @@ export default function Form() {
   const [selection, setSelection] = useState<string | undefined>(undefined);
   const { config, updateConfig } = useContext(ConfigContext);
 
-  console.log({config, formData});
-  
-
   useEffect(() => {
     if (config.rememberAnnotationChoices && config.choices) {
       setFormData((prevState) => ({
