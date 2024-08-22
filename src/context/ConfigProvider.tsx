@@ -35,28 +35,29 @@ export const ConfigProvider = ({
   };
 
   useEffect(() => {
-    chrome.storage.local.get("config", ({ config }) => {
-      if (config) {
-        setConfig(config);
+    const loadConfig = async () => {
+      try {
+        const result = await chrome.storage.local.get("config");
+        if (result.config) {
+          setConfig(result.config);
+        }
+        console.log("Config loaded:", result.config);
+      } catch (error) {
+        console.error("Error loading config:", error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
-    });
+    };
+
+    loadConfig();
   }, []);
 
-  
   useEffect(() => {
     if (!loading) {
       const saveConfig = async () => {
         try {
-          await new Promise<void>((resolve, reject) => {
-            chrome.storage.local.set({ config }, () => {
-              if (chrome.runtime.lastError) {
-                reject(chrome.runtime.lastError);
-              } else {
-                resolve();
-              }
-            });
-          });
+          await chrome.storage.local.set({ config });
+          console.log("Config saved successfully");
         } catch (error) {
           console.error("Error saving config:", error);
         }
