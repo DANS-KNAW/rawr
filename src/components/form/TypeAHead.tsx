@@ -6,9 +6,10 @@ import {
   ComboboxOptions,
   Label,
 } from "@headlessui/react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ComboBoxDataItem, ComboBoxInputDto } from "../../types/inputs-types";
 import InfoIcon from "../icons/Info";
+import ConfigContext from "../../context/ConfigContext";
 
 export default function TypeAHead({
   inputProps,
@@ -16,11 +17,13 @@ export default function TypeAHead({
   inputProps: ComboBoxInputDto;
 }) {
   const [query, setQuery] = useState("");
+  const [data, setData] = useState<ComboBoxDataItem[]>(inputProps.data);
   const [multipleItems, setMultipleItems] = useState<ComboBoxDataItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<ComboBoxDataItem | null>(
     null
   );
 
+  const { config, updateConfig } = useContext(ConfigContext);
   const internalID = inputProps.name.toLowerCase().replace(" ", "_");
   const multiple = inputProps.multiple;
 
@@ -28,6 +31,23 @@ export default function TypeAHead({
     inputProps.disabled !== undefined || inputProps.submitting !== undefined
       ? inputProps.disabled || inputProps.submitting
       : undefined;
+
+  const removeCustomItem = (item: ComboBoxDataItem) => {
+    const updatedData = data.filter((dataItem) => dataItem.id !== item.id);
+    setData(updatedData);
+    if (multiple) {
+      setMultipleItems(
+        multipleItems.filter((selectedItem) => selectedItem.id !== item.id)
+      );
+    } else if (selectedItem && selectedItem.id === item.id) {
+      setSelectedItem(null);
+    }
+
+    updateConfig({
+      ...config,
+      keywords: config.keywords.filter((keyword) => keyword.id !== item.id),
+    });
+  };
 
   useEffect(() => {
     const initialValues = (
@@ -45,9 +65,7 @@ export default function TypeAHead({
 
   useEffect(() => {
     if (inputProps.defaultValue) {
-      const item = inputProps.data.find(
-        (item) => item.id === inputProps.defaultValue
-      );
+      const item = data.find((item) => item.id === inputProps.defaultValue);
       if (item) {
         setSelectedItem(item);
       }
@@ -55,6 +73,15 @@ export default function TypeAHead({
   }, [inputProps.defaultValue]);
 
   useEffect(() => {
+    if (inputProps.allowCustomValue && selectedItem !== null) {
+      if (selectedItem.id.startsWith("custom-")) {
+        const exists = data.some((item) => item.id === selectedItem.id);
+        if (!exists) {
+          const newItems = [...data, selectedItem];
+          setData(newItems);
+        }
+      }
+    }
     if (!multiple && selectedItem !== null) {
       inputProps.callback(internalID, selectedItem);
     }
@@ -73,8 +100,8 @@ export default function TypeAHead({
 
   const filteredItems =
     query === ""
-      ? inputProps.data
-      : inputProps.data.filter((item) => {
+      ? data
+      : data.filter((item) => {
           const label = item.label || "";
           return label.toLowerCase().includes(query.toLowerCase());
         });
@@ -180,12 +207,16 @@ export default function TypeAHead({
               }`}
             >
               <ComboboxOption
-                value={{
-                  id: `id-${
-                    Date.now() + "-" + Math.floor(Math.random() * 1000)
-                  }`,
-                  label: query,
-                }}
+                value={
+                  {
+                    id: `custom-${
+                      query.toLowerCase().replace(" ", "_") ||
+                      Date.now() + "-" + Math.floor(Math.random() * 1000)
+                    }`,
+                    label: query,
+                    value: query,
+                  } as ComboBoxDataItem
+                }
                 className="relative select-none py-2 pl-3 pr-9 text-gray-900 hover:bg-gray-200 cursor-pointer"
               >
                 Create <span className="font-bold">"{query}"</span>
@@ -206,55 +237,83 @@ export default function TypeAHead({
                   (selectedItem) => selectedItem.id === item.id
                 );
               return (
-                <ComboboxOption
-                  key={item.id}
-                  value={item}
-                  className={({ focus }) =>
-                    `relative cursor-default select-none py-2 pl-3 pr-9 ${
-                      focus ? "bg-rda-500 text-white" : "text-gray-900"
-                    } ${
-                      isSelected &&
-                      "cursor-not-allowed bg-gray-200 text-gray-500"
-                    }`
-                  }
-                  disabled={isSelected}
-                >
-                  {({ focus, selected }) => (
-                    <>
-                      <span
-                        className={`block truncate ${
-                          selected && "font-semibold"
-                        }`}
+                <div className="flex w-full overflow-hidden">
+                  {/* Remove custom value button */}
+                  {inputProps.allowCustomValue == true && (
+                    <button
+                      type="button"
+                      className="flex items-center text-red-400 px-2 hover:bg-red-200 rounded-r-md"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeCustomItem(item);
+                      }}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6"
                       >
-                        {item.label}
-                      </span>
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+                        />
+                      </svg>
+                    </button>
+                  )}
 
-                      {selected && (
+                  <ComboboxOption
+                    key={item.id}
+                    value={item}
+                    className={`text-gray-900 relative w-full h-full flex items-center cursor-default select-none py-2 pl-3 pr-9 hover:bg-rda-500 hover:text-white ${
+                      inputProps.allowCustomValue ? "rounded-l-md" : ""
+                    }
+                      ${
+                        isSelected &&
+                        "cursor-not-allowed bg-gray-200 text-gray-500"
+                      }`}
+                    disabled={isSelected}
+                  >
+                    {({ focus, selected }) => (
+                      <>
                         <span
-                          className={`absolute inset-y-0 right-0 flex items-center pr-4 ${
-                            focus ? "text-white" : "text-rda-500"
+                          className={`block break-words ${
+                            selected && "font-semibold"
                           }`}
                         >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="h-5 w-5"
-                            aria-hidden="true"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="m4.5 12.75 6 6 9-13.5"
-                            />
-                          </svg>
+                          {item.label}
                         </span>
-                      )}
-                    </>
-                  )}
-                </ComboboxOption>
+
+                        {selected && (
+                          <span
+                            className={`absolute inset-y-0 right-0 flex items-center pr-4 ${
+                              focus ? "text-white" : "text-rda-500"
+                            }`}
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="h-5 w-5"
+                              aria-hidden="true"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="m4.5 12.75 6 6 9-13.5"
+                              />
+                            </svg>
+                          </span>
+                        )}
+                      </>
+                    )}
+                  </ComboboxOption>
+                </div>
               );
             })}
           </ComboboxOptions>

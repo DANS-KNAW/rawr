@@ -48,7 +48,7 @@ export interface Config {
   };
   rememberAnnotationChoices: boolean;
   choices: Record<string, ComboBoxDataItem[]>;
-  keywords: string[];
+  keywords: ComboBoxDataItem[];
 }
 
 const defaultConfig = {

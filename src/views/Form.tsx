@@ -112,6 +112,23 @@ export default function Form() {
   );
 
   useEffect(() => {
+    const newKeywords = formData?.["keywords/tags"] as ComboBoxDataItem[];
+
+    if (newKeywords && newKeywords.length > 0) {
+      const existingKeywords = config.keywords.map((item) => item.id);
+      const newKeywordsValues = newKeywords.map((item) => item.id);
+      const uniqueKeywords = newKeywordsValues.filter(
+        (value) => !existingKeywords.includes(value)
+      );
+
+      if (uniqueKeywords.length > 0) {
+        updateConfig({
+          ...config,
+          keywords: [...config.keywords, ...newKeywords],
+        });
+      }
+    }
+
     if (config.rememberAnnotationChoices) {
       const newChoices = { ...config.choices };
       let hasChanges = false;
@@ -259,6 +276,8 @@ export default function Form() {
           value: item.uuid_pathway,
           label: item.pathway,
         }));
+      case "keywords":
+        return config.keywords;
       default:
         throw new Error("Invalid vocabulary");
     }
@@ -318,6 +337,7 @@ export default function Form() {
               value: field.value,
               defaultValue: field.defaultValue,
               data: getComboBoxData(field.vocabulary),
+              allowCustomValue: field.allowCustomValue,
               submitting: submitting,
               callback: handleChange,
               infoDialog: handleInfoDialog,
@@ -406,6 +426,7 @@ export default function Form() {
             : "Submit Annotation"}
         </button>
       </form>
+
       {dialogOpen && (
         <div className="w-full h-full z-10 fixed inset-0">
           <div className="w-full h-full absolute inset-0 opacity-20 bg-black"></div>
