@@ -41,7 +41,6 @@ export const ConfigProvider = ({
         if (result.config) {
           setConfig(result.config);
         }
-        console.log("Config loaded:", result.config);
       } catch (error) {
         console.error("Error loading config:", error);
       } finally {
@@ -57,7 +56,6 @@ export const ConfigProvider = ({
       const saveConfig = async () => {
         try {
           await chrome.storage.local.set({ config });
-          console.log("Config saved successfully");
         } catch (error) {
           console.error("Error saving config:", error);
         }
