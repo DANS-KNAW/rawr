@@ -1,3 +1,15 @@
+import { ComboBoxDataItem } from "./inputs-types";
+
+export interface Vocabs {
+  pathways: ComboBoxDataItem[];
+  gorc_attributes: ComboBoxDataItem[];
+  gorc_elements: ComboBoxDataItem[];
+  interest_groups: ComboBoxDataItem[];
+  working_groups: ComboBoxDataItem[];
+  domains: ComboBoxDataItem[];
+  keywords: ComboBoxDataItem[];
+}
+
 export interface Annotation {
   page_url: string;
   uritype: string;
@@ -15,13 +27,5 @@ export interface Annotation {
     created_at: string;
     resource: string;
   };
-  vocabularies: {
-    pathways: string[];
-    gorc_attributes: string[];
-    gorc_elements: string[];
-    interest_groups: string[];
-    working_groups: string[];
-    domains: string[];
-    keywords: string[];
-  };
+  vocabularies: Vocabs;
 }
