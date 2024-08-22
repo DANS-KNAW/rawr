@@ -16,6 +16,7 @@ interface TextInputSchemaDto extends BaseInputSchema {
 
 export interface TextInputDto extends BaseInputSchema {
   value?: string;
+  submitting?: boolean;
   callback: (key: string, value: string) => void;
   infoDialog: (content: string) => void;
 }
@@ -29,6 +30,7 @@ interface TextareaInputSchemaDto extends BaseInputSchema {
 export interface TextareaInputDto extends BaseInputSchema {
   value?: string;
   rows?: number;
+  submitting?: boolean;
   callback: (key: string, value: string) => void;
   infoDialog: (content: string) => void;
 }
@@ -49,6 +51,7 @@ export interface ComboBoxInputDto extends BaseInputSchema {
   dropdownUp?: boolean;
   defaultValue?: string;
   allowCustomValue?: boolean;
+  submitting?: boolean;
   callback: (key: string, value: any) => void;
   infoDialog: (content: string) => void;
 }

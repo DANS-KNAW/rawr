@@ -4,7 +4,6 @@ import "./style.css";
 import App from "./App";
 import { NavigationProvider } from "./context/NavigationProvider";
 import { ConfigProvider } from "./context/ConfigProvider";
-import TextSelectionProvider from "./context/TextSelectionProvider";
 
 const root = () => {
   const headLink = document.createElement("link");
@@ -67,9 +66,7 @@ const ContentScript = () => {
     <div style={{ display: isVisible ? "block" : "none" }}>
       <ConfigProvider>
         <NavigationProvider>
-          <TextSelectionProvider>
-            <App isVisible={isVisible} />
-          </TextSelectionProvider>
+          <App isVisible={isVisible} />
         </NavigationProvider>
       </ConfigProvider>
     </div>

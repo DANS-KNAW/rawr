@@ -24,6 +24,11 @@ export default function TypeAHead({
 
   const multiple = inputProps.multiple;
 
+  const shouldDisable =
+  inputProps.disabled !== undefined || inputProps.submitting !== undefined
+    ? inputProps.disabled || inputProps.submitting
+    : undefined;
+
   useEffect(() => {
     if (inputProps.defaultValue) {
       const item = inputProps.data.find(
@@ -67,7 +72,7 @@ export default function TypeAHead({
       onChange={(value: ComboBoxDataItem | null) => {
         setSelectedItem(value);
       }}
-      disabled={inputProps.disabled ?? undefined}
+      disabled={shouldDisable}
       onClose={() => setQuery("")}
     >
       <div className="flex justify-between items-center">
@@ -90,7 +95,9 @@ export default function TypeAHead({
         <ul className="my-2 space-x-2 space-y-2">
           {multipleItems.map((item) => (
             <button
-              disabled={inputProps.disabled ?? undefined}
+              disabled={
+                shouldDisable
+              }
               key={item.id}
               onClick={() =>
                 setMultipleItems(multipleItems.filter((i) => i.id !== item.id))
@@ -125,14 +132,14 @@ export default function TypeAHead({
           className="w-full rounded-md border-0 bg-white py-1.5 pl-8 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-rda-500 sm:text-sm sm:leading-6 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:select-none"
           onChange={(event) => setQuery(event.target.value)}
           onBlur={() => setQuery("")}
-          disabled={inputProps.disabled ?? undefined}
+          disabled={shouldDisable}
           displayValue={(item: ComboBoxDataItem | null) =>
             item ? item.label : ""
           }
           required={inputProps.required ?? undefined}
         />
         <ComboboxButton
-          disabled={inputProps.disabled ?? undefined}
+          disabled={shouldDisable}
           className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2"
         >
           <svg
@@ -152,20 +159,27 @@ export default function TypeAHead({
           </svg>
         </ComboboxButton>
 
-        {inputProps.allowCustomValue && filteredItems.length < 1 && query.length > 0 && (
-          <ComboboxOptions
-            className={`absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-sm ${
-              inputProps.dropdownUp ? "bottom-10" : ""
-            }`}
-          >
-            <ComboboxOption
-              value={{ id: `id-${Date.now() + '-' + Math.floor(Math.random() * 1000)}`, label: query }}
-              className="relative select-none py-2 pl-3 pr-9 text-gray-900 hover:bg-gray-200 cursor-pointer"
+        {inputProps.allowCustomValue &&
+          filteredItems.length < 1 &&
+          query.length > 0 && (
+            <ComboboxOptions
+              className={`absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none text-sm ${
+                inputProps.dropdownUp ? "bottom-10" : ""
+              }`}
             >
-              Create <span className="font-bold">"{query}"</span>
-            </ComboboxOption>
-          </ComboboxOptions>
-        )}
+              <ComboboxOption
+                value={{
+                  id: `id-${
+                    Date.now() + "-" + Math.floor(Math.random() * 1000)
+                  }`,
+                  label: query,
+                }}
+                className="relative select-none py-2 pl-3 pr-9 text-gray-900 hover:bg-gray-200 cursor-pointer"
+              >
+                Create <span className="font-bold">"{query}"</span>
+              </ComboboxOption>
+            </ComboboxOptions>
+          )}
 
         {filteredItems.length > 0 && (
           <ComboboxOptions

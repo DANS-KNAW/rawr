@@ -2,21 +2,30 @@ import { useEffect, useState } from "react";
 import { TextareaInputDto } from "../../types/inputs-types";
 import InfoIcon from "../icons/Info";
 
-export default function Textarea({ inputProps }: { inputProps: TextareaInputDto }) {
+export default function Textarea({
+  inputProps,
+}: {
+  inputProps: TextareaInputDto;
+}) {
   const [value, setValue] = useState<string>(inputProps.value ?? "");
   const internalID = inputProps.name.toLowerCase().replace(" ", "_");
 
+  const shouldDisable =
+    inputProps.disabled !== undefined || inputProps.submitting !== undefined
+      ? inputProps.disabled || inputProps.submitting
+      : undefined;
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value);
-  }
-  
+  };
+
   useEffect(() => {
     setValue(inputProps.value ?? "");
   }, [inputProps.value]);
 
   useEffect(() => {
     inputProps.callback(internalID, value);
-  }, [value])
+  }, [value]);
   return (
     <div>
       <div className="flex justify-between items-center">
@@ -42,7 +51,7 @@ export default function Textarea({ inputProps }: { inputProps: TextareaInputDto 
           id={internalID}
           onChange={handleChange}
           required={inputProps.required ?? undefined}
-          disabled={inputProps.disabled ?? undefined}
+          disabled={shouldDisable}
           className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-rda-500 text-sm leading-6 disabled:cursor-not-allowed disabled:bg-gray-200 disabled:select-none"
           value={value}
         />

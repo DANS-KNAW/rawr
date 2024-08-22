@@ -1,12 +1,10 @@
 import { useContext } from "react";
 import ConfigContext from "../context/ConfigContext";
 import NavigationContext from "../context/NavigationContext";
-import { TextSelectionContext } from "../context/TextSelectionProvider";
 
 export default function Annotations() {
   const { config, updateConfig } = useContext(ConfigContext);
   const { setCurrent } = useContext(NavigationContext);
-  const selection = useContext(TextSelectionContext);
 
   return (
     <div className="relative h-full w-full flex flex-col">
@@ -45,14 +43,6 @@ export default function Annotations() {
         </a>
       </div>
       <div className="p-5">
-        <h4 className="text-base font-semibold leading-6 text-gray-900">
-          How do I create an annotation?
-        </h4>
-        <p className="mt-2 text-sm text-gray-500">
-          Simply select the text you wish to annotate, and the "Create
-          Annotation" button will be enabled. Click it to create an annotation.
-          This will open a form where you can add your annotation metadata.
-        </p>
         <h4 className="mt-4 text-base font-semibold leading-6 text-gray-900">
           Where can I find my annotations?
         </h4>
@@ -64,9 +54,6 @@ export default function Annotations() {
           onClick={() => {
             setCurrent("form");
           }}
-          disabled={
-            selection == undefined || selection == "" || selection == null
-          }
           type="button"
           className="rounded-md mt-6 bg-rda-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-rda-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rda-500 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-rda-500 disabled:select-none"
         >
