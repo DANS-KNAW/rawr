@@ -34,8 +34,6 @@ chrome.action.onClicked.addListener(async (tab) => {
   });
 });
 
-chrome.storage.local.clear();
-
 // Storage API to manage config
 export interface Config {
   seenActiveDevelopmentWarning: boolean;

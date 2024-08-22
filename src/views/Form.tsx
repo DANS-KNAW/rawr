@@ -33,8 +33,36 @@ export default function Form() {
   const [canSubmit, setCanSubmit] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [selection, setSelection] = useState<string | undefined>(undefined);
+  const { config, updateConfig } = useContext(ConfigContext);
 
-  const { config } = useContext(ConfigContext);
+  console.log({config, formData});
+  
+
+  useEffect(() => {
+    if (config.rememberAnnotationChoices && config.choices) {
+      setFormData((prevState) => ({
+        ...prevState,
+        ...config.choices,
+      }));
+      setSchema((prevSchema) => {
+        const updatedFields = prevSchema.fields.map((field) => {
+          const key = field.name.replace(/ /g, "_").toLowerCase();
+          if (field.type == "combobox" && config.choices[key] !== undefined) {
+            return {
+              ...field,
+              value: config.choices[key],
+            };
+          }
+          return field;
+        });
+
+        return {
+          ...prevSchema,
+          fields: updatedFields,
+        };
+      });
+    }
+  }, []);
 
   function getCurrentSelection(): string | null {
     const selection = document.getSelection();
@@ -48,7 +76,7 @@ export default function Form() {
 
   useEffect(() => {
     const requiredFieldsValues = requiredFields.map(
-      (field) => formData?.[field.name.replace(/ /g, "_").toLowerCase()]
+      (field) => formData?.[field.name.toLowerCase().replace(" ", "_")]
     );
 
     requiredFieldsValues.forEach((value, index) => {
@@ -81,6 +109,36 @@ export default function Form() {
       setSchema(formSchema);
     }
   }, [submitting]);
+
+  const comboBoxFields = schema.fields.filter(
+    (field) => field.type === "combobox"
+  );
+
+  useEffect(() => {
+    if (config.rememberAnnotationChoices) {
+      const newChoices = { ...config.choices };
+      let hasChanges = false;
+
+      comboBoxFields.forEach((field) => {
+        const key = field.name.replace(/ /g, "_").toLowerCase();
+        const value = formData?.[key];
+        if (
+          value &&
+          JSON.stringify(value) !== JSON.stringify(newChoices[key])
+        ) {
+          newChoices[key] = value;
+          hasChanges = true;
+        }
+      });
+
+      if (hasChanges) {
+        updateConfig({
+          ...config,
+          choices: newChoices,
+        });
+      }
+    }
+  }, [formData]);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -260,6 +318,7 @@ export default function Form() {
               disabled: field.disabled,
               multiple: field.multiple,
               dropdownUp: field.dropdownUp,
+              value: field.value,
               defaultValue: field.defaultValue,
               data: getComboBoxData(field.vocabulary),
               submitting: submitting,
@@ -314,6 +373,30 @@ export default function Form() {
       </div>
       <form className="my-4 px-5 pb-8" onSubmit={handleSubmit}>
         <div className="space-y-4">{FormContent}</div>
+        <div className="relative flex items-start mt-6 mb-2">
+          <div className="flex h-6 items-center">
+            <input
+              onChange={(e) => {
+                handleChange("remember_choices", e.target.checked);
+                updateConfig({
+                  ...config,
+                  rememberAnnotationChoices: e.target.checked,
+                });
+              }}
+              checked={config.rememberAnnotationChoices}
+              type="checkbox"
+              className="size-6 rounded border-gray-300 text-rda-500 focus:ring-rda-500"
+            />
+          </div>
+          <div className="ml-3 text-sm">
+            <label htmlFor="comments" className="font-medium text-gray-900">
+              Remember my choices for next time
+            </label>
+            <p id="candidates-description" className="text-gray-500">
+              This includes all vocabulary and keyword choices.
+            </p>
+          </div>
+        </div>
         <button
           type="submit"
           title={canSubmit ? "" : "Please fill out all required fields"}

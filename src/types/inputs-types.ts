@@ -40,12 +40,13 @@ interface ComboBoxInputSchemaDto extends BaseInputSchema {
   vocabulary: Vocabularies;
   multiple?: boolean;
   dropdownUp?: boolean;
+  value?: ComboBoxDataItem | ComboBoxDataItem[];
   defaultValue?: string;
   allowCustomValue?: boolean;
 }
 
 export interface ComboBoxInputDto extends BaseInputSchema {
-  value?: string;
+  value?: ComboBoxDataItem | ComboBoxDataItem[];
   data: ComboBoxDataItem[];
   multiple?: boolean;
   dropdownUp?: boolean;

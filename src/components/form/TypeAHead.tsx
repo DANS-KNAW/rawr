@@ -20,14 +20,28 @@ export default function TypeAHead({
   const [selectedItem, setSelectedItem] = useState<ComboBoxDataItem | null>(
     null
   );
-  const internalID = inputProps.name.toLowerCase().replace(" ", "_");
 
+  const internalID = inputProps.name.toLowerCase().replace(" ", "_");
   const multiple = inputProps.multiple;
 
   const shouldDisable =
-  inputProps.disabled !== undefined || inputProps.submitting !== undefined
-    ? inputProps.disabled || inputProps.submitting
-    : undefined;
+    inputProps.disabled !== undefined || inputProps.submitting !== undefined
+      ? inputProps.disabled || inputProps.submitting
+      : undefined;
+
+  useEffect(() => {
+    const initialValues = (
+      Array.isArray(inputProps.value) ? inputProps.value : [inputProps.value]
+    ).filter(Boolean) as ComboBoxDataItem[];
+
+    if (initialValues.length) {
+      if (multiple) {
+        setMultipleItems(initialValues);
+      } else {
+        setSelectedItem(initialValues[0]);
+      }
+    }
+  }, [inputProps.value]);
 
   useEffect(() => {
     if (inputProps.defaultValue) {
@@ -95,9 +109,7 @@ export default function TypeAHead({
         <ul className="my-2 space-x-2 space-y-2">
           {multipleItems.map((item) => (
             <button
-              disabled={
-                shouldDisable
-              }
+              disabled={shouldDisable}
               key={item.id}
               onClick={() =>
                 setMultipleItems(multipleItems.filter((i) => i.id !== item.id))
