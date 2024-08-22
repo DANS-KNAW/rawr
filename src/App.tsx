@@ -35,6 +35,7 @@ export default function App({ isVisible }: { isVisible: boolean }) {
             <Fragment>
               {item.current && item.tab === "annotations" && <Annotations />}
               {item.current && item.tab === "form" && <Form />}
+              {item.current && item.tab === "about" && <Annotations />}
               {item.current && item.tab === "settings" && <Settings />}
             </Fragment>
           ))}

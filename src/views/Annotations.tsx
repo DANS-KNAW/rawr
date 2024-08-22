@@ -50,12 +50,26 @@ export default function Annotations() {
           Your annotations will currently be deposited on the Search and
           Descovory enviroment. Currently located at rda.dansdemo.nl
         </p>
+        {/* <div className="relative flex items-start mt-6 mb-2">
+          <div className="flex h-6 items-center">
+            <input
+              type="checkbox"
+              aria-describedby="hide-welcome-message"
+              className="size-6 rounded border-gray-300 text-rda-500 focus:ring-rda-500"
+            />
+          </div>
+          <div className="ml-3 text-sm">
+            <label htmlFor="comments" className="font-medium text-gray-900">
+              Don't show this again
+            </label>
+          </div>
+        </div> */}
         <button
           onClick={() => {
             setCurrent("form");
           }}
           type="button"
-          className="rounded-md mt-6 bg-rda-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-rda-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rda-500 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-rda-500 disabled:select-none"
+          className="rounded-md mt-6 bg-rda-500 px-3 py-2 w-full text-sm font-semibold text-white shadow-sm hover:bg-rda-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-rda-500 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:bg-rda-500 disabled:select-none"
         >
           Create Annotation
         </button>

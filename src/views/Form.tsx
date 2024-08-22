@@ -288,7 +288,7 @@ export default function Form() {
         <Textarea
           inputProps={{
             name: "Annotation",
-            info: "This is the annotated text.",
+            info: "This is the text that will be used as the annotation. You can make a selection on the page and click the 'Annotate Selection' button to automatically fill this field.",
             required: true,
             disabled: true,
             value: selection,

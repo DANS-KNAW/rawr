@@ -7,8 +7,8 @@ export const NavigationProvider = ({
   children: ReactNode | ReactNode[];
 }) => {
   const [navigationItems, setNavigationItems] = useState<NavigationItem[]>([
-    { label: "Annotations", current: true, tab: "annotations" },
-    { parent: "annotations", label: "Create", current: false, tab: "form" },
+    { label: "Annotations", current: false, tab: "form" },
+    { label: "About", current: true, tab: "about" },
     { label: "Settings", current: false, tab: "settings" },
   ]);
 
