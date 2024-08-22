@@ -7,6 +7,7 @@ export const ConfigProvider = ({
 }: {
   children: ReactNode | ReactNode[];
 }) => {
+  const [loading, setLoading] = useState(true);
   const [config, setConfig] = useState<Config>({
     seenActiveDevelopmentWarning: true,
     vocabularies: {
@@ -17,6 +18,9 @@ export const ConfigProvider = ({
       gorc_attributes: true,
       domains: true,
     },
+    rememberAnnotationChoices: false,
+    choices: {},
+    keywords: [],
   });
 
   const updateConfig = (config: Config) => {
@@ -35,12 +39,32 @@ export const ConfigProvider = ({
       if (config) {
         setConfig(config);
       }
+      setLoading(false);
     });
   }, []);
 
+  
   useEffect(() => {
-    chrome.storage.local.set({ config });
-  }, [config]);
+    if (!loading) {
+      const saveConfig = async () => {
+        try {
+          await new Promise<void>((resolve, reject) => {
+            chrome.storage.local.set({ config }, () => {
+              if (chrome.runtime.lastError) {
+                reject(chrome.runtime.lastError);
+              } else {
+                resolve();
+              }
+            });
+          });
+        } catch (error) {
+          console.error("Error saving config:", error);
+        }
+      };
+
+      saveConfig();
+    }
+  }, [config, loading]);
 
   return (
     <ConfigContext.Provider value={{ config, updateConfig }}>

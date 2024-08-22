@@ -1,3 +1,5 @@
+import { ComboBoxDataItem } from "./types/inputs-types";
+
 chrome.action.onClicked.addListener(async (tab) => {
   // Check if the current tab ID is undefined
   if (tab.id === undefined) {
@@ -45,6 +47,9 @@ export interface Config {
     gorc_attributes: boolean;
     domains: boolean;
   };
+  rememberAnnotationChoices: boolean;
+  choices: Record<string, ComboBoxDataItem[]>;
+  keywords: string[];
 }
 
 const defaultConfig = {
