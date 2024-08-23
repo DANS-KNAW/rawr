@@ -51,8 +51,9 @@ export interface Config {
   keywords: ComboBoxDataItem[];
 }
 
-const defaultConfig = {
+const defaultConfig: Config = {
   seenActiveDevelopmentWarning: false,
+  skipWelcome: false,
   vocabularies: {
     pathways: true,
     working_groups: true,
@@ -61,6 +62,9 @@ const defaultConfig = {
     gorc_attributes: true,
     domains: true,
   },
+  rememberAnnotationChoices: false,
+  choices: {},
+  keywords: [],
 };
 
 // Set the default configuration only on installation
