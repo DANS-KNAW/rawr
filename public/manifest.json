@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "RAWR",
     "description": "RAWR - RDA Annotator for Web Resources",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "icons": {
         "32": "images/icon-32.png",
         "72": "images/icon-72.png",
