@@ -11,9 +11,9 @@ export default function TextInput({
   const internalID = inputProps.name.toLowerCase().replace(" ", "_");
 
   const shouldDisable =
-  inputProps.disabled !== undefined || inputProps.submitting !== undefined
-    ? inputProps.disabled || inputProps.submitting
-    : undefined;
+    inputProps.disabled !== undefined || inputProps.submitting !== undefined
+      ? inputProps.disabled || inputProps.submitting
+      : undefined;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
@@ -34,7 +34,9 @@ export default function TextInput({
           htmlFor={internalID}
           className="text-sm leading-6 text-gray-900 capitalize flex-1"
         >
-          <span>{inputProps.name}</span>
+          <span>
+            {inputProps.label != undefined ? inputProps.label : inputProps.name}
+          </span>
           {inputProps.required === true && (
             <span className="text-red-500 ml-1">*</span>
           )}

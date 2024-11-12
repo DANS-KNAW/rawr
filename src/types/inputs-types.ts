@@ -4,6 +4,7 @@ export interface FormDto {
 
 interface BaseInputSchema {
   name: string;
+  label?: string;
   required?: boolean;
   disabled?: boolean;
   info?: string;

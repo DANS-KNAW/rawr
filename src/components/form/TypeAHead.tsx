@@ -121,7 +121,9 @@ export default function TypeAHead({
           htmlFor={internalID}
           className="text-sm leading-6 text-gray-900 capitalize flex-1"
         >
-          <span>{inputProps.name}</span>
+          <span>
+            {inputProps.label != undefined ? inputProps.label : inputProps.name}
+          </span>
           {inputProps.required === true && (
             <span className="text-red-500 ml-1">*</span>
           )}
