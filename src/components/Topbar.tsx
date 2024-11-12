@@ -41,8 +41,8 @@ export default function Topbar({
         <div className="flex justify-between">
           <div className="pt-2">
             <h1 className="uppercase italic text-white text-2xl -mt-1">
-              <span className="font-black">RDA Tiger</span>
-              <span className="font-normal text-base ml-2">v1.1</span>
+              <span className="font-black">RDA Annotator</span>
+              <span className="font-normal text-base ml-2">v1.3</span>
             </h1>
             <div className="mt-3">
               <Breadcrumbs />

@@ -47,8 +47,8 @@ export default function Annotations() {
           Where can I find my annotations?
         </h4>
         <p className="mt-2 text-sm text-gray-500">
-          Your annotations will currently be deposited on the Search and
-          Descovory enviroment. Currently located at rda.dansdemo.nl
+          Your annotations will currently be deposited in the RDA Graph, and are
+          available from the RDA Discovery application - click here to open a new tab
         </p>
         <div className="relative flex items-start mt-6 mb-2">
           <div className="flex h-6 items-center">
